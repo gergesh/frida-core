@@ -286,9 +286,7 @@ namespace Frida {
 		}
 
 		public async bool can_handle_target (uint pid, Cancellable? cancellable) throws Error, IOError {
-			uint local_arch = sizeof (void *) == 8 ? 64 : 32;
-			uint remote_arch = WindowsProcess.is_x64 (pid) ? 64 : 32;
-			return local_arch == remote_arch;
+			return Gum.Windows.query_native_cpu_type () == cpu_type_from_pid (pid);
 		}
 
 		public async void inject_library_file (uint pid, PathTemplate path_template, string entrypoint, string data,

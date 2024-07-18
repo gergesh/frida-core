@@ -508,60 +508,6 @@ frida_remote_worker_context_collect_kernel32_export (const GumExportDetails * de
   return TRUE;
 }
 
-gboolean
-frida_windows_system_is_x64 (void)
-{
-  static gboolean initialized = FALSE;
-  static gboolean system_is_x64;
-
-  if (!initialized)
-  {
-    SYSTEM_INFO si;
-
-    GetNativeSystemInfo (&si);
-    system_is_x64 = si.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_AMD64;
-
-    initialized = TRUE;
-  }
-
-  return system_is_x64;
-}
-
-gboolean
-frida_windows_process_is_x64 (guint32 pid, GError ** error)
-{
-  HANDLE process_handle;
-  BOOL is_wow64, success;
-
-  if (!frida_windows_system_is_x64 ())
-    return FALSE;
-
-  process_handle = OpenProcess (PROCESS_QUERY_INFORMATION, FALSE, pid);
-  if (process_handle == NULL)
-    goto open_failed;
-  success = IsWow64Process (process_handle, &is_wow64);
-  CloseHandle (process_handle);
-  if (!success)
-    goto query_failed;
-
-  return !is_wow64;
-
-open_failed:
-  {
-    frida_propagate_open_process_error (pid, GetLastError (), error);
-    return FALSE;
-  }
-query_failed:
-  {
-    g_set_error (error,
-        FRIDA_ERROR,
-        FRIDA_ERROR_NOT_SUPPORTED,
-        "Unexpected error while interrogating process with pid %u (IsWow64Process failed)",
-        pid);
-    return FALSE;
-  }
-}
-
 static gboolean
 frida_file_exists_and_is_readable (const WCHAR * filename)
 {

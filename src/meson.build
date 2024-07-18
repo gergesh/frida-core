@@ -61,7 +61,10 @@ if have_local_backend
       'windows' / 'frida-helper-types.vala',
       'windows' / 'wait-handle-source.c',
     ]
-    helper_backend_vala_args = base_vala_args
+    helper_backend_vala_args = [
+      base_vala_args,
+      '--pkg=frida-gum-windows-1.0',
+    ]
     helper_backend = static_library('frida-helper-backend', helper_backend_sources,
       vala_args: helper_backend_vala_args,
       c_args: frida_component_cflags,
