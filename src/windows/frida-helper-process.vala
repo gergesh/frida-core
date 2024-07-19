@@ -57,9 +57,7 @@ namespace Frida {
 				string[] dependencies, uint id, Cancellable? cancellable) throws Error, IOError {
 			bool permission_denied = false;
 			try {
-				unowned string local_arch = sizeof (void *) == 8 ? "64" : "32";
-				unowned string remote_arch = WindowsProcess.is_x64 (pid) ? "64" : "32";
-				if (remote_arch == local_arch) {
+				if (cpu_type_from_pid (pid) == Gum.NATIVE_CPU) {
 					yield inprocess_backend.inject_library_file (pid, path_template, entrypoint, data, dependencies,
 						id, cancellable);
 					return;
@@ -172,7 +170,7 @@ namespace Frida {
 			Error? error = null;
 
 			try {
-				string native_helper_path = WindowsSystem.is_x64 ()
+				string native_helper_path = true // TODO
 					? resource_store.helper64.path
 					: resource_store.helper32.path;
 				string level_str = (level == PrivilegeLevel.ELEVATED) ? "ELEVATED" : "NORMAL";

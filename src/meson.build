@@ -44,6 +44,14 @@ if have_local_backend
     '@INPUT0@',
   ]
 
+  if helper_emulated_modern == 'auto'
+    helper_emulated_modern = ''
+  endif
+
+  if helper_emulated_legacy == 'auto'
+    helper_emulated_legacy = ''
+  endif
+
   if host_os_family == 'windows'
     backend_sources += [
       'windows' / 'windows-host-session.vala',
@@ -108,7 +116,7 @@ if have_local_backend
           'frida-data-helper-process.c',
           'frida-data-helper-process-blob' + resource_blob_extension,
         ],
-        command: embed_helper + [helper_modern, helper_legacy],
+        command: embed_helper + [helper_modern, helper_legacy, helper_emulated_modern, helper_emulated_legacy],
         depends: helper_depends,
       )
       backend_sources += [helper_process_data]
@@ -256,7 +264,7 @@ if have_local_backend
           'frida-data-helper-process.c',
           'frida-data-helper-process-blob' + resource_blob_extension,
         ],
-        command: embed_helper + [helper_modern, helper_legacy],
+        command: embed_helper + [helper_modern, helper_legacy, helper_emulated_modern, helper_emulated_legacy],
         depends: helper_depends,
       )
       backend_sources += [helper_process_data]
@@ -409,7 +417,7 @@ if have_local_backend
           'frida-data-helper-process.c',
           'frida-data-helper-process-blob' + resource_blob_extension,
         ],
-        command: embed_helper + [helper_modern, helper_legacy],
+        command: embed_helper + [helper_modern, helper_legacy, helper_emulated_modern, helper_emulated_legacy],
         depends: helper_depends,
       )
       backend_sources += [helper_process_data]

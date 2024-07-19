@@ -314,6 +314,13 @@ frida_stop_and_unregister_services (FridaServiceContext * self)
   frida_unregister_services (self);
 }
 
+/* TODO: Remove this. */
+static gboolean
+frida_windows_system_is_x64 (void)
+{
+  return TRUE;
+}
+
 static gboolean
 frida_spawn_standalone_services (FridaServiceContext * self)
 {

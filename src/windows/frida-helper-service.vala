@@ -99,8 +99,7 @@ namespace Frida {
 		private async void start () {
 			try {
 				helper32 = new ServiceConnection (HelperService.derive_svcname_for_suffix ("32"));
-				if (WindowsSystem.is_x64 ())
-					helper64 = new ServiceConnection (HelperService.derive_svcname_for_suffix ("64"));
+				helper64 = new ServiceConnection (HelperService.derive_svcname_for_suffix ("64"));
 
 				context = start_services (HelperService.derive_basename (), level);
 
