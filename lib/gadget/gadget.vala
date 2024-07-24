@@ -750,11 +750,21 @@ namespace Frida.Gadget {
 #endif
 
 		string config_data;
+#if ANDROID
+    Bytes config_data_bytes;
+#endif
 		try {
 			FileUtils.get_contents (config_path, out config_data);
 		} catch (FileError e) {
 			if (e is FileError.NOENT)
-				return new Config ();
+#if ANDROID
+        if (!Gum.ElfModule.maybe_extract_from_apk (config_path, out config_data_bytes))
+#endif
+				  return new Config ();
+#if ANDROID
+        else config_data = (string) config_data_bytes;
+#endif
+
 			throw new Error.PERMISSION_DENIED ("%s", e.message);
 		}
 
